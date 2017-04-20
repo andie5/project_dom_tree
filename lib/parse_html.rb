@@ -80,7 +80,6 @@ class ParseHTML
    
     current_node.children.each do |child|
       unless child.children.nil?
-        # binding.pry
         outputter(child)
       end
     end
