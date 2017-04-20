@@ -79,7 +79,7 @@ class ParseHTML
     puts "#{current_node.current}"
    
     current_node.children.each do |child|
-      unless child.children == [] 
+      unless child.children.nil?
         # binding.pry
         outputter(child)
       end
