@@ -45,8 +45,6 @@ class ParseHTML
       create_child_nodes(head)
       head.children.each do |child|
 
-        # puts "The string found is '#{head.current}"
-        # puts "The remaining string is'#{@html_string}"
         build_tree(child)
       end
     end
