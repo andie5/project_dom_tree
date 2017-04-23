@@ -8,6 +8,7 @@ class DomLoader
 
   def initialize(file_path)
     @dict_file = file_path
+    read_file
   end
 
   def read_file
