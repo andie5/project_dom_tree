@@ -6,27 +6,42 @@ class NodeRenderer
 
   def initialize(tree)
     @tree = tree
-
-    
   end
 
-  def calculate(node)
+  def nodes_count(tree_strc=@tree)
     @total_nodes = 0
     # Based on the node passed in
-    @tree.each do |node|
+    tree_strc.children.each do |node|
       @total_nodes +=1
-
-    type_count
-
     end
-
+    puts "The total number of nodes are #{@total_nodes}"
   end
 
+  def type_count(tree_strc=@tree)
+    # Based on the node passed in
+    @node_count = Hash.new
 
-  def type_count
-     # store the type of node in a hash
-      # check if the node is already in the hash, if not append to it
+    tree_strc.children.each do |node|
+      type = node.type
+
+      # If the hash key is already present append to it or add it as a new key
+      if(@node_count.key?(type))
+        @node_count[type] += 1
+      else
+        # Add a new key to the hash 
+        @node_count[type] = 1
+      end
+    end
+    puts "The total number of nodes of each type are #{@type_count}"
   end
+
+  def data_attributes(node)
+    puts "The nodes data_attributes are as follows:"
+
+    node.classes == [] ? puts "There are no classes" : puts "The classes are as follows #{node.classes}"
+    node.id = ""? puts "No id attributes" : puts "The id is follows #{node.id}"
+  end
+
 
   def print_statistics
     # print total nodes
@@ -34,5 +49,16 @@ class NodeRenderer
 
     # output the actual attributes stored in the node
   end
+
+  # def outputter(data_structure)
+  #   current_node = data_structure
+  #   puts "#{current_node.current}"
+   
+  #   current_node.children.each do |child|
+  #     unless child.children.nil?
+  #       outputter(child)
+  #     end
+  #   end
+  # end
 
 end
