@@ -12,8 +12,8 @@ class DomReader
     @html_str = dom_loader.html_str
 
     # Remove the doctype node before parsing the rest if the file
-    @html_str = @html_str.sub(/^<!doctype html>/, "").strip
-    parser_script(dom_loader.html_str)
+    @html_str = @html_str.sub(/\A<!doctype html>/, "").strip
+    parser_script(@html_str)
   end
 
   def parser_script(html_string)
@@ -83,18 +83,19 @@ class DomReader
       elsif(!close_tag.empty?)
         current = close_tag
         type = get_type_closing(close_tag)
-      # elsif(!em_tag.empty?)
-      #   i = @html_str.index(/</)
-      #   em_size = em_tag.length
-      #   current = @html_str[0..i+em_size]
       else
         i = @html_str.index(/</, 0)
-        current = @html_str[0..i-1]
+        # Check if there is an embedded emphasise tag
+        if (@html_str[i+1] == "e")
+          em_size = em_tag.length
+          current = @html_str[0..i+em_size]
+        else
+          current = @html_str[0..i-1]
+        end
       end
 
       # Get the type of node
       type = "text" if type.empty?
-
 
       new_node = Node.new(type, id, classes, current, [], current_node)
       current_node.children << new_node
