@@ -1,4 +1,4 @@
-require 'dom_reader.rb'
+require_relative 'dom_reader'
 
 class NodeRenderer
 
@@ -8,57 +8,64 @@ class NodeRenderer
     @tree = tree
   end
 
-  def nodes_count(tree_strc=@tree)
-    @total_nodes = 0
-    # Based on the node passed in
-    tree_strc.children.each do |node|
-      @total_nodes +=1
-    end
-    puts "The total number of nodes are #{@total_nodes}"
+  def render(node=@tree)
+    nodes_count(node)
+    type_count(node)
+    print_statistics(node)
   end
 
-  def type_count(tree_strc=@tree)
+  def nodes_count(node)
+    @total_nodes = 0
+    unless node.children.nil?
+      node.children.each do |child|
+        nodes_count(child)
+        @total_nodes +=1
+      end
+    end
+  end
+
+  def type_count(node)
     # Based on the node passed in
     @node_count = Hash.new
 
-    tree_strc.children.each do |node|
-      type = node.type
+    unless node.children.nil?
+      node.children.each do |child|
+        type_count(child)
+        type = child.type
 
-      # If the hash key is already present append to it or add it as a new key
-      if(@node_count.key?(type))
-        @node_count[type] += 1
-      else
-        # Add a new key to the hash 
-        @node_count[type] = 1
+        # If the hash key is already present append to it or add it as a new key
+        if(@node_count.key?(type))
+          @node_count[type] += 1
+        else
+          # Add a new key to the hash 
+          @node_count[type] = 1
+        end
       end
     end
-    puts "The total number of nodes of each type are #{@type_count}"
+  end
+
+  def output_types
+    puts "The frequency of each type of node:"
+     @node_count.each {|key, value| puts "#{key} : #{value}"}
   end
 
   def data_attributes(node)
-    puts "The nodes data_attributes are as follows:"
+    if node.classes == []
+      puts "There are no classes in this node"
+    else
+      puts "The classes are as follows #{node.classes}"
+    end
 
-    node.classes == [] ? puts "There are no classes" : puts "The classes are as follows #{node.classes}"
-    node.id = ""? puts "No id attributes" : puts "The id is follows #{node.id}"
+    if node.id = ""
+      puts "No id attributes"
+    else
+      puts "The id is as follows #{node.id}"
+    end
   end
 
-
-  def print_statistics
-    # print total nodes
-    # print hash of node counts
-
-    # output the actual attributes stored in the node
+  def print_statistics(node)
+    puts "The total number of nodes are #{@total_nodes}"
+    output_types
+    data_attributes(node)
   end
-
-  # def outputter(data_structure)
-  #   current_node = data_structure
-  #   puts "#{current_node.current}"
-   
-  #   current_node.children.each do |child|
-  #     unless child.children.nil?
-  #       outputter(child)
-  #     end
-  #   end
-  # end
-
 end
