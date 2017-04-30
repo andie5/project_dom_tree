@@ -1,37 +1,35 @@
 require_relative 'dom_reader'
 
 class DomSearcher
-  attr_accessor :tree, :nodes_found,
-  
-# Consider saving your Regular Expression to a variable or constant that's appropriately named instead of just using the naked expression in your code.
+  attr_accessor :tree, :nodes_found
 
   def initialize(tree)
     @tree = tree
+    @nodes_found = []
   end
 
-  def search_by(search_item)
+  def search_by(some_node, search_item)
     case search_item
       when :name
-       search_item.type
+       some_node.type
       when :text
-       search_item.text
+       some_node.text
       when :id
-       search_item.id
+       some_node.id
       when :class
-       search_item.classes
+       some_node.classes
     end
   end
 
   def check_current(some_node, type, text)
-    if(some_node.search_type.scan(text) )
+    if(some_node.type.scan(text))
       @nodes_found << some_node
     end
   end
 
   def search_children(some_node, type, text)
-    @nodes_found = []
-
-    search_type = search_by(type)
+    
+    search_type = search_by(some_node, type)
     check_current(some_node, search_type, text)
     search_children_nodes(some_node, search_type, text)
   end
@@ -40,10 +38,10 @@ class DomSearcher
     # from the node given loop through its children until there are no more children
     unless some_node.children.nil?
       some_node.children.each do |child|
-        if(child.search_type.scan(text) )
+        if(child.type.scan(text) )
           @nodes_found << some_node
         end
-        search_children_nodes(child, search_type, text)
+        search_children_nodes(child, type, text)
       end
     end
   end
@@ -51,25 +49,21 @@ class DomSearcher
   def search_ancestors(some_node, type, text)
     @nodes_found = []
 
-    search_type = search_by(type)
+    search_type = search_by(some_node, type)
     check_current(some_node, search_type, text)
     search_ancestors_nodes(some_node, search_type, text)
   end
 
-  def search_ancestors_nodes(some_node, search_type, text)
-     # from the node given loop through its parent until there are no more parentss
+  def search_ancestors_nodes(some_node, type, text)
+     # from the node given loop through its parent until there are no more parents
 
      unless some_node.parent.nil?
       some_node.parent.each do |ancestor|
-        if(ancestor.search_type.scan(text).join != "")
+        if(ancestor.type.scan(text))
           @nodes_found << some_node
         end
-        search_ancestors_nodes(ancestor, search_type, text)
+        search_ancestors_nodes(ancestor, type, text)
       end
     end
   end
-
-  # def output
-  #   sidebars.each { |node| renderer.render(node) }
-  # end
 end

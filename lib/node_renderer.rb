@@ -1,7 +1,6 @@
 require_relative 'dom_reader'
 
 class NodeRenderer
-
   attr_accessor :tree, :total_nodes, :node_count
 
   def initialize(tree)

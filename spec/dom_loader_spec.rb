@@ -18,7 +18,7 @@ describe DomLoader do
   end
 
    describe "#read_file" do
-    let(:dom) {DomLoader.new("rspec_test.html") }
+    let(:dom) {DomLoader.new("test2.html") }
 
      it "returns an error if the file path isn't found" do
       expect {DomLoader.new("unknown.html")}.to raise_error(StandardError)

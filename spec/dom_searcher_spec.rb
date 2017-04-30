@@ -1,40 +1,53 @@
+require 'dom_searcher'
 require 'dom_reader'
-require 'dom_renderer'
 
-class DomSearcher
-  attr_accessor :tree; :nodes_found
 
+describe DomSearcher do 
   
-# Consider saving your Regular Expression to a variable or constant that's appropriately named instead of just using the naked expression in your code.
+  describe '#initialize' do
+    let(:dom) {DomReader.new("test2.html") }
+    
+    it 'creates a loader of type DomSearcher' do
+      expect(DomSearcher.new(dom.document)).is_a? DomSearcher
+    end
 
-  def initialize
-    # stores the tree
-  end
+    it "accepts a tree variable and does not throw an error" do
+      expect {DomSearcher.new(dom.document)}.not_to raise_error
+    end
 
-  def search_by(type, word)
-
-    # loop through the tree
-    # store each node found in the array that
-
-# if its a class search by class, elseif text seach the text, else if id, seacrh by id or class 
-
-    # current.type == word
-  end
-
-  def search_children(some_node, :id, "key-section")
-    # from the node given loop through its children until there are no more children
+    it "throws an error if no tree variable is provided" do
+      expect {DomSearcher.new}.to raise_error(ArgumentError)
+    end
   end
 
 
-  def search_ancestors
-     # from the node given loop through its parent until there are no more parentss
+  describe '#search_by' do
+    let(:ds) {DomReader.new("test2.html") }
+    let(:dom) {DomSearcher.new(ds.document) }
+    it 'returns the correct search type' do
+      expect(dom.search_by(ds.document, :name)).to eq("html")
+    end
+
+    it 'returns no classes if there is no class' do
+      expect(dom.search_by(ds.document, :classes)).to be(nil)
+    end
+
+    it 'returns the correct search text' do
+      expect(dom.search_by(ds.document, :text)).to eq("<html>")
+    end
+
+    it 'returns no id if there is no id attribute' do
+      expect(dom.search_by(ds.document, :id)).to be(nil)
+    end
   end
 
+   describe '#check_current' do
+    let(:ds) {DomReader.new("test2.html") }
+    let(:dom) {DomSearcher.new(ds.document) }
 
-  def output
-    sidebars.each { |node| renderer.render(node) }
+
+    it 'finds a an element and stores the node' do
+      expect(dom.check_current(ds.document, :name, "html")).is_a? Node
+    end
   end
-
-
-
 end
