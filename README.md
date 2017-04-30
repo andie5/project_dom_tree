@@ -49,7 +49,8 @@ filepath = "../test.html"
 dr = DomReader.new(filepath)
 rd = RebuildDom.new(dr.document)
 rd.rebuild(dr.document)
-rd.html_str ```
+rd.html_str
+```
 
 
 
