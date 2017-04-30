@@ -23,14 +23,16 @@ Using pry:
 # DomReader
 ```load 'load_reader.rb'
 filepath = "../test.html"
-dr = DomReader.new(filepath)```
+dr = DomReader.new(filepath)
+```
 
 # NodeRenderer
 ```load 'node_renderer.rb'
 filepath = "../test.html"
 dr = DomReader.new(filepath)
 nr = NodeRenderer.new(dr.document)
-nr.render```
+nr.render
+```
 
 # DomSearcher
 ```load 'dom_searcher.rb'
